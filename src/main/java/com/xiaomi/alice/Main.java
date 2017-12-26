@@ -32,9 +32,14 @@ public class Main {
         AliceBotMother mother = new AliceBotMother();
         mother.setUp();
         AliceBot bot = mother.newInstance();
+        long begin =System.currentTimeMillis();
         System.out.println(bot.respond("今天星期几"));
         System.out.println(bot.respond("好烦呢"));
-        System.out.println(bot.respond("怎么进行推广"));
+        
+        System.out.println(bot.respond("怎么进行推广呀"));
+        System.out.println(bot.respond("怎么进行充值"));
+        long end = System.currentTimeMillis();
+        System.out.println((end-begin));
         /*System.err.println("Alice>" + bot.respond("welcome"));
         while (true) {
             String input = input();

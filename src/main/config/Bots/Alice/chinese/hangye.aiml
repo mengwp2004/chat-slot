@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+<category> 
+<pattern>怎么进行推广*</pattern> 
+<template>通过58同城来进行推广
+</template> 
+</category>
+
+<category> 
+<pattern>怎么进行充值*</pattern> 
+<template><slot></slot>
+</template> 
+</category>
+
+
+</aiml>
