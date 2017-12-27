@@ -56,6 +56,8 @@ public class Slot extends TemplateElement
     //AliceBot bot = match.getCallback();
     //Context context = bot.getContext();
     //return context.id();
-	return "slot test";
+    String input = super.process(match);
+	//return "slot test";
+    return input;
   }
 }

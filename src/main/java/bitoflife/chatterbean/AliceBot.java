@@ -88,28 +88,49 @@ public class AliceBot {
 	 * @return A response to the request.
 	 */
 	public Response respond(Request request) {
+		
+		long end = 0;
+		boolean bTime = false;
+		if(bTime) {
+		   end = System.currentTimeMillis();
+           //end = System.nanoTime();
+           System.out.println("1:"  +  String.valueOf(end));
+		}
 		String original = request.getOriginal();
 		if (original == null || "".equals(original.trim()))// 如果输入的字符串是空的，那就直接返回空的字符串。
 			return new Response("");
-
+		if(bTime) {
+		   end = System.currentTimeMillis();
+		   System.out.println("2:"  +  String.valueOf(end));
+		}
 		Sentence that = context.getThat();
 		Sentence topic = context.getTopic();
 
-		// System.out.println("原始Request:");// ###########
-		// System.out.println(request.toString());
+		//System.out.println("原始Request:");// ###########
+		//System.out.println(request.toString());
 
 		transformations().normalization(request);
 		//
-		// System.out.println("规范Request:");// ###########
-		// System.out.println(request.toString());
-
+		//System.out.println("规范Request:");// ###########
+		//System.out.println(request.toString());
+		if(bTime) {
+		  end = System.currentTimeMillis();
+		  System.out.println("3:"  +  String.valueOf(end));
+		}
 		context.appendRequest(request);
 
 		Response response = new Response();
 		for (Sentence sentence : request.getSentences())
 			respond(sentence, that, topic, response);
+		    if(bTime) {
+		      end = System.currentTimeMillis();
+		      System.out.println(":" + String.valueOf(end));
+		    }
 		context.appendResponse(response);
-
+		if(bTime) {
+		  end = System.currentTimeMillis();
+	      System.out.println("last:"  +  String.valueOf(end));
+		}
 		return response;
 	}
 
@@ -121,7 +142,13 @@ public class AliceBot {
 	 * @return A response to the request string.
 	 */
 	public String respond(String input) {
+		long end = 0;
+		boolean bTime = false;
 		Response response = respond(new Request(input));
+		if(bTime) {
+		  end = System.currentTimeMillis();
+		  System.out.println("respond:"  +  String.valueOf(end));
+		}
 		return response.trimOriginal();
 	}
 

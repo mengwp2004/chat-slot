@@ -7,8 +7,8 @@
 </category>
 
 <category> 
-<pattern>怎么进行充值*</pattern> 
-<template><slot></slot>
+<pattern>我怎么进行充值我的账号</pattern> 
+<template><slot>subject:我 verb:充值 object:账户 service:黄页 domain:在线购买 type:how</slot>
 </template> 
 </category>
 

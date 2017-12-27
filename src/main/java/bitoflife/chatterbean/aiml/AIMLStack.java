@@ -1,5 +1,5 @@
 /*
-Copyleft (C) 2005 Hélio Perroni Filho
+Copyleft (C) 2005 Hï¿½lio Perroni Filho
 xperroni@bol.com.br
 ICQ: 2490863
 
@@ -36,11 +36,13 @@ public class AIMLStack
   
   public Object pop()
   {
+	//java.lang.System.out.println("pop stack:");
     return (stack.size() > 0 ? stack.remove(0) : null);
   }
   
   public void push(Object element)
   {
+	//java.lang.System.out.println("push stack:");
     stack.add(0, element);
   }
 }

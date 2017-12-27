@@ -19,9 +19,10 @@ public class Translate {
 		for (int i = 0; i < input.length(); i++) {
 			chars[0] = input.charAt(i);
 			m = p.matcher(new String(chars));
-			if (!m.matches())
-				newStr.append(" ").append(input.charAt(i)).append(" ");
-			else
+			//delete mwp
+			//if (!m.matches())
+			//	newStr.append(" ").append(input.charAt(i)).append(" ");
+			//else
 				newStr.append(input.charAt(i));
 		}
 		// java.lang.System.out.println("#" + newStr.toString());

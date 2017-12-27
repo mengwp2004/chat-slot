@@ -26,20 +26,35 @@ public class Main {
         return input;
 
     }
+    
+    public static String get_slot(AliceBot bot,String sentence) {
+    	return bot.respond(sentence);
+    }
+    
     public static void main(String[] args) throws Exception {
         System.getProperties().load(Main.class.getClassLoader().getResourceAsStream("my.properties"));
-
+		long end = 0,begin=0;
+		boolean bTime = false;
         AliceBotMother mother = new AliceBotMother();
         mother.setUp();
         AliceBot bot = mother.newInstance();
-        long begin =System.currentTimeMillis();
-        System.out.println(bot.respond("今天星期几"));
-        System.out.println(bot.respond("好烦呢"));
+        begin =System.currentTimeMillis();
+        System.out.println("begin:"  +  String.valueOf(begin));
+        //begin = System.nanoTime();
+        //System.out.println(bot.respond("今天星期几"));
+        //System.out.println(bot.respond("好烦呢"));
         
-        System.out.println(bot.respond("怎么进行推广呀"));
-        System.out.println(bot.respond("怎么进行充值"));
-        long end = System.currentTimeMillis();
+        //System.out.println(bot.respond("怎么进行推广呀"));
+
+        String res = bot.respond("我怎么进行充值我的账号");
+        String sentence = "我怎么进行充值我的账号";
+        //String res = sentence;
+        System.out.println(get_slot(bot,sentence));
+        end = System.currentTimeMillis();
+        //end = System.nanoTime();
+        System.out.println("end:"  +  String.valueOf(end));
         System.out.println((end-begin));
+        //System.out.println(res);
         /*System.err.println("Alice>" + bot.respond("welcome"));
         while (true) {
             String input = input();

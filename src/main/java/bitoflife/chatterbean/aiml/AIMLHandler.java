@@ -21,6 +21,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.Set;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 
 public class AIMLHandler extends DefaultHandler {
 	/*
@@ -68,6 +69,25 @@ public class AIMLHandler extends DefaultHandler {
 			stack.push(new Text(pushed));
 	}
 
+	private void pushTextNode(boolean isToSegment) {
+		String pushed = text.toString();
+		text.delete(0, text.length());
+		if (ignoreWhitespace) {
+			// 这个正则表达式是不是写的有点累赘啊？？？
+			pushed = pushed.replaceAll("^[\\s\n]+|[\\s\n]{2,}|\n", " ");// 转义符到底怎么用？
+			//java.lang.System.out.println("push text ignore:" + pushed);
+		}
+		if (!"".equals(pushed.trim()))
+			if(!isToSegment)
+			  stack.push(new Text(pushed));
+			else {
+		          pushed= pushed.toUpperCase();  
+		          pushed = IKAnalyzer.IKAnalysis(pushed);
+		          //java.lang.System.out.println("push text:" + pushed);
+		          stack.push(new Text(pushed));  
+			}
+	}
+	
 	private void updateIgnoreWhitespace(Attributes attributes) {
 		try {
 			ignoreWhitespace = !"preserve".equals(attributes
@@ -83,9 +103,9 @@ public class AIMLHandler extends DefaultHandler {
 		while ((poped = stack.pop()) != null)
 			if (poped instanceof Aiml)
 				result.addAll(((Aiml) poped).children());
-		// for (Category c : result) {
-		// java.lang.System.out.println(c.toString());
-		// }
+		 /*for (Category c : result) {
+		   java.lang.System.out.println( "unload:" + c.toString());
+		 }*/
 		return result;
 	}
 
@@ -99,7 +119,7 @@ public class AIMLHandler extends DefaultHandler {
 		if (ignored.contains(qname)) // ignored这个变量好像没有被赋值过？？？
 			return;
 		updateIgnoreWhitespace(attributes);// 这个是干什么用的？
-		pushTextNode();
+		pushTextNode(qname.toLowerCase().equals("pattern"));
 		String className = buildClassName(qname);
 		try {
 			Class tagClass = Class.forName(className);// 这里使用了反射机制。
@@ -122,7 +142,7 @@ public class AIMLHandler extends DefaultHandler {
 
 		if (ignored.contains(qname))
 			return;
-		pushTextNode();
+		pushTextNode(qname.toLowerCase().equals("pattern"));
 		ignoreWhitespace = true;
 		String className = buildClassName(qname);
 		for (List<AIMLElement> children = new LinkedList<AIMLElement>();;) {
