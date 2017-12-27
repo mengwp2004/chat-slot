@@ -10,6 +10,8 @@ import java.util.regex.Matcher;
  */
 public class Translate {
 	public static String translateString(String input) {
+		boolean bUseIK = true;
+		//boolean bUseIK = false;
 		StringBuffer newStr = new StringBuffer("");
 		String strTemp = "";
 		java.util.regex.Pattern p = java.util.regex.Pattern
@@ -19,10 +21,10 @@ public class Translate {
 		for (int i = 0; i < input.length(); i++) {
 			chars[0] = input.charAt(i);
 			m = p.matcher(new String(chars));
-			//delete mwp
-			//if (!m.matches())
-			//	newStr.append(" ").append(input.charAt(i)).append(" ");
-			//else
+			
+			if (!bUseIK && !m.matches())//not use ik
+				newStr.append(" ").append(input.charAt(i)).append(" ");
+			else
 				newStr.append(input.charAt(i));
 		}
 		// java.lang.System.out.println("#" + newStr.toString());

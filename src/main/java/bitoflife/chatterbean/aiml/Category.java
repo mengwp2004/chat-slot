@@ -30,7 +30,7 @@ public class Category implements AIMLElement
   private Template template;
   private That that;
   private Topic topic;
-  private boolean bSlot;//use for slot
+  private boolean bSlot;//=true;//use for slot
   
   /*
   Constructor
@@ -109,7 +109,7 @@ public class Category implements AIMLElement
   public String toString()
   {
 	if(bSlot)
-		return "[" + pattern.toString() + "]";
+		return "[" + pattern.toString() + "][" + template.toString() + "]";
 	else
         return "[" + pattern.toString() + "][" + that.toString() + "][" + template.toString() + "]";
   }

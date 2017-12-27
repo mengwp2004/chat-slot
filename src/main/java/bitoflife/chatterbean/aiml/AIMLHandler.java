@@ -30,9 +30,8 @@ public class AIMLHandler extends DefaultHandler {
 
 	private final Set<String> ignored = new HashSet<String>();
 	final StringBuilder text = new StringBuilder(); // 这个变量被重复使用，而不是每次都new一个。
-
 	private boolean ignoreWhitespace = true;
-
+	private boolean bUseIK = true;
 	/**
 	 * The stack of AIML objects is used to build the Categories as AIML
 	 * documents are parsed. The scope is defined as package for testing
@@ -81,8 +80,9 @@ public class AIMLHandler extends DefaultHandler {
 			if(!isToSegment)
 			  stack.push(new Text(pushed));
 			else {
-		          pushed= pushed.toUpperCase();  
-		          pushed = IKAnalyzer.IKAnalysis(pushed);
+		          pushed= pushed.toUpperCase(); 
+		          if(bUseIK)
+		             pushed = IKAnalyzer.IKAnalysis(pushed);
 		          //java.lang.System.out.println("push text:" + pushed);
 		          stack.push(new Text(pushed));  
 			}
@@ -103,9 +103,9 @@ public class AIMLHandler extends DefaultHandler {
 		while ((poped = stack.pop()) != null)
 			if (poped instanceof Aiml)
 				result.addAll(((Aiml) poped).children());
-		 /*for (Category c : result) {
+		 for (Category c : result) {
 		   java.lang.System.out.println( "unload:" + c.toString());
-		 }*/
+		 }
 		return result;
 	}
 
@@ -119,7 +119,10 @@ public class AIMLHandler extends DefaultHandler {
 		if (ignored.contains(qname)) // ignored这个变量好像没有被赋值过？？？
 			return;
 		updateIgnoreWhitespace(attributes);// 这个是干什么用的？
-		pushTextNode(qname.toLowerCase().equals("pattern"));
+		if(bUseIK)
+		    pushTextNode(qname.toLowerCase().equals("pattern"));
+		else
+			pushTextNode();
 		String className = buildClassName(qname);
 		try {
 			Class tagClass = Class.forName(className);// 这里使用了反射机制。
@@ -142,7 +145,10 @@ public class AIMLHandler extends DefaultHandler {
 
 		if (ignored.contains(qname))
 			return;
-		pushTextNode(qname.toLowerCase().equals("pattern"));
+		if(bUseIK)
+		    pushTextNode(qname.toLowerCase().equals("pattern"));
+		else
+			pushTextNode();
 		ignoreWhitespace = true;
 		String className = buildClassName(qname);
 		for (List<AIMLElement> children = new LinkedList<AIMLElement>();;) {

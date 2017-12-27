@@ -50,7 +50,7 @@ public class Transformations {
 		private String input;
 		private String find;
 		private String replace;
-
+     
 		/*
 		 * Constructor
 		 */
@@ -131,7 +131,8 @@ public class Transformations {
 	private List<Substitution> person;
 	private List<Substitution> person2;
 	private List<Substitution> gender;
-
+    private boolean bUseIK = true;
+    //private boolean bUseIK = false;
 	/*
 	 * Constructor Section
 	 */
@@ -306,8 +307,11 @@ public class Transformations {
 	 * @param request
 	 */
 	public void normalization(Request request) {
-		//String original = chineseTranslate(request.getOriginal());
-		String original = IKAnalyzer.IKAnalysis(request.getOriginal());
+		String original ="";
+		if(!bUseIK)
+		  chineseTranslate(request.getOriginal());
+		else
+		  original = IKAnalyzer.IKAnalysis(request.getOriginal());
 		original = ' ' + original + ' ';
 		original = original.replaceAll("\\s{2,}", " ");
 		String input[] = splitter.split(original);// 这里句子的分隔还有问题，只能分隔英文的句号，不能识别中文的句号？？？？
@@ -325,8 +329,10 @@ public class Transformations {
 	public void normalization(Sentence sentence) {
 		String input = breakWords(sentence.getOriginal());
 		input = ' ' + input + ' ';
-		//input = chineseTranslate(input);
-		input = IKAnalyzer.IKAnalysis(input);
+		if(!bUseIK)
+		   input = chineseTranslate(input);
+		else
+		   input = IKAnalyzer.IKAnalysis(input);
 		input = input.replaceAll("\\s{2,}", " ");
 		sentence.setOriginal(input);
 
@@ -340,8 +346,10 @@ public class Transformations {
 	}
 
 	public String normalization(String input) {
-		//input = chineseTranslate(input);
-		input = IKAnalyzer.IKAnalysis(input);
+		if(!bUseIK)
+		  input = chineseTranslate(input);
+		else
+		  input = IKAnalyzer.IKAnalysis(input);
 		input = ' ' + input + ' ';
 		input = input.replaceAll("\\s{2,}", " ");
 		input = substitute(input);
