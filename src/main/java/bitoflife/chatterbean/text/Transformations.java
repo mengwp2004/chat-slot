@@ -133,6 +133,7 @@ public class Transformations {
 	private List<Substitution> gender;
     private boolean bUseIK = true;
     //private boolean bUseIK = false;
+    private boolean bSlot =true;
 	/*
 	 * Constructor Section
 	 */
@@ -308,20 +309,35 @@ public class Transformations {
 	 */
 	public void normalization(Request request) {
 		String original ="";
-		if(!bUseIK)
+		long end = 0;
+		boolean bTime = false;		
+		if(bTime) {
+			   end = System.currentTimeMillis();
+			   System.out.println("11:"  +  String.valueOf(end));
+		}
+		//System.out.println(request.getOriginal());
+		if(!bUseIK) {
 		  chineseTranslate(request.getOriginal());
+		  original = ' ' + original + ' ';
+		}
 		else
 		  original = IKAnalyzer.IKAnalysis(request.getOriginal());
-		original = ' ' + original + ' ';
+		//System.out.println("after-:" +original);
 		original = original.replaceAll("\\s{2,}", " ");
 		String input[] = splitter.split(original);// 这里句子的分隔还有问题，只能分隔英文的句号，不能识别中文的句号？？？？
-
+		if(bTime) {
+			   end = System.currentTimeMillis();
+			   System.out.println("12:"  +  String.valueOf(end));
+		}
 		Sentence[] sentences = new Sentence[input.length];
 		for (int i = 0, n = input.length; i < n; i++) {
 			sentences[i] = new Sentence(input[i]);
 			normalization(sentences[i]);
 		}
-
+		if(bTime) {
+			   end = System.currentTimeMillis();
+			   System.out.println("13:"  +  String.valueOf(end));
+		}
 		request.setOriginal(original);
 		request.setSentences(sentences);
 	}
@@ -329,10 +345,14 @@ public class Transformations {
 	public void normalization(Sentence sentence) {
 		String input = breakWords(sentence.getOriginal());
 		input = ' ' + input + ' ';
-		if(!bUseIK)
-		   input = chineseTranslate(input);
-		else
-		   input = IKAnalyzer.IKAnalysis(input);
+		//System.out.println(input);
+		if(bSlot) {
+			if(!bUseIK)
+			   input = chineseTranslate(input);
+			else
+			   input = IKAnalyzer.IKAnalysis(input);
+		}
+		//System.out.println("after:" +input);
 		input = input.replaceAll("\\s{2,}", " ");
 		sentence.setOriginal(input);
 

@@ -58,15 +58,19 @@ public class Match implements Serializable { // Math为什么定义为可序列�
 	private Sentence topic;
 
 	private String[] matchPath;
+	
+	private boolean bSlot = false;
 
 	// 发现这里的列表长度都是2的，是不是说只支持2个通配符？？？列表里面应该是存的是通配符所匹配的内容吧？
 	// 代码快。代码块的作用？
 	{
 		sections.put(Section.PATTERN, new ArrayList<String>(2)); // Pattern
 																	// wildcards
+		if(!bSlot) {
 		sections.put(Section.THAT, new ArrayList<String>(2)); // That wildcards
 		sections.put(Section.TOPIC, new ArrayList<String>(2)); // Topic
 																// wildcards
+		}
 	}
 
 	/*
@@ -75,15 +79,24 @@ public class Match implements Serializable { // Math为什么定义为可序列�
 
 	public Match() {
 	}
-
+	
+	public Match(AliceBot callback, Sentence input) {
+		this.callback = callback;
+		this.input = input;
+        setUpMatchPath(input.getSplittedOfSentence());
+	}
 	public Match(AliceBot callback, Sentence input, Sentence that,
 			Sentence topic) {
 		this.callback = callback;
 		this.input = input;
+		if(bSlot) {
+			setUpMatchPath(input.getSplittedOfSentence());
+		}else {
 		this.that = that;
 		this.topic = topic;
 		setUpMatchPath(input.getSplittedOfSentence(),
 				that.getSplittedOfSentence(), topic.getSplittedOfSentence());
+		}
 	}
 
 	public Match(Sentence input) {
@@ -121,6 +134,12 @@ public class Match implements Serializable { // Math为什么定义为可序列�
 		System.arraycopy(topic, 0, matchPath, m + 1 + n + 1, o);
 	}
 
+	private void setUpMatchPath(String[] pattern) {
+		int m = pattern.length;
+		matchPath = new String[m ];
+		System.arraycopy(pattern, 0, matchPath, 0, m);
+	
+	}
 	// 根据部分的长度分级处理。
 	public void appendWildcard(int beginIndex, int endIndex) {
 		int inputLength = input.length();

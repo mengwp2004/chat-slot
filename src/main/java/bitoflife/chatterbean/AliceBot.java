@@ -80,6 +80,19 @@ public class AliceBot {
 		}
 	}
 
+	/*
+	 * Method Section
+	 */
+
+	private void respond(Sentence sentence,Response response) {
+		if (sentence.length() > 0) {
+			Match match = new Match(this, sentence);// match把AliceBot,sentence,that,topic进行封装。
+			Category category = graphmaster.match(match);
+			if (category == null)
+				System.out.println("category==null");
+			response.append(category.process(match));
+		}
+	}
 	/**
 	 * Responds a request.
 	 * 
@@ -123,6 +136,7 @@ public class AliceBot {
 		Response response = new Response();
 		for (Sentence sentence : request.getSentences())
 			respond(sentence, that, topic, response);
+		    //respond(sentence,response);
 		    if(bTime) {
 		      end = System.currentTimeMillis();
 		      System.out.println(":" + String.valueOf(end));

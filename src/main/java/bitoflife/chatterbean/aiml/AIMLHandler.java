@@ -103,9 +103,9 @@ public class AIMLHandler extends DefaultHandler {
 		while ((poped = stack.pop()) != null)
 			if (poped instanceof Aiml)
 				result.addAll(((Aiml) poped).children());
-		 for (Category c : result) {
+		 /*for (Category c : result) {
 		   java.lang.System.out.println( "unload:" + c.toString());
-		 }
+		 }*/
 		return result;
 	}
 
