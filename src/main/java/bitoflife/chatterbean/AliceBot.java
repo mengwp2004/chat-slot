@@ -91,6 +91,7 @@ public class AliceBot {
 		
 		long end = 0;
 		boolean bTime = false;
+		boolean bSlot = true;
 		if(bTime) {
 		   end = System.currentTimeMillis();
            //end = System.nanoTime();
@@ -126,7 +127,8 @@ public class AliceBot {
 		      end = System.currentTimeMillis();
 		      System.out.println(":" + String.valueOf(end));
 		    }
-		context.appendResponse(response);
+		if(!bSlot)
+		    context.appendResponse(response);
 		if(bTime) {
 		  end = System.currentTimeMillis();
 	      System.out.println("last:"  +  String.valueOf(end));
