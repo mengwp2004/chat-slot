@@ -44,12 +44,13 @@ public class Main {
         //System.out.println(bot.respond("今天星期几"));
         //System.out.println(bot.respond("好烦呢"));
         
-        System.out.println(bot.respond("怎么进行推广呀"));
+        //System.out.println(bot.respond("怎么进行推广呀"));
 
         String res = bot.respond("我怎么进行充值我的账号");
         String sentence = "我怎么进行充值我的账号";
+        System.out.println(res);
         //String res = sentence;
-        System.out.println(get_slot(bot,sentence));
+        //System.out.println(get_slot(bot,sentence));
         end = System.currentTimeMillis();
         //end = System.nanoTime();
         System.out.println("end:"  +  String.valueOf(end));

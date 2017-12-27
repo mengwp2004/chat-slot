@@ -30,6 +30,7 @@ public class Category implements AIMLElement
   private Template template;
   private That that;
   private Topic topic;
+  private boolean bSlot;//use for slot
   
   /*
   Constructor
@@ -60,6 +61,7 @@ public class Category implements AIMLElement
     this.template = template;
     this.that = that;
     this.topic = topic;
+    this.bSlot = true;
   }
   
   public Category(Attributes attributes)
@@ -96,14 +98,20 @@ public class Category implements AIMLElement
     if (obj == null || !(obj instanceof Category)) return false;
     Category compared = (Category) obj;
     
-    return (pattern.equals(compared.pattern) &&
+    if(bSlot)
+    	return pattern.equals(compared.pattern);
+    else
+        return (pattern.equals(compared.pattern) &&
             template.equals(compared.template) &&
             that.equals(compared.that));
   }
 
   public String toString()
   {
-    return "[" + pattern.toString() + "][" + that.toString() + "][" + template.toString() + "]";
+	if(bSlot)
+		return "[" + pattern.toString() + "]";
+	else
+        return "[" + pattern.toString() + "][" + that.toString() + "][" + template.toString() + "]";
   }
 
   public String process(Match match)
@@ -117,21 +125,27 @@ public class Category implements AIMLElement
   
   public String[] getMatchPath()
   {
-    String[] pattPath = pattern.getElements();     
-    String[] thatPath = that.elements();
-    String[] topicPath = topic.elements();
-    int m = pattPath.length;
-    int n = thatPath.length;
-    int o = topicPath.length;
-    String[] matchPath = new String[m + 1 + n + 1 + o];
-
-    matchPath[m] = "<THAT>";
-    matchPath[m + 1 + n] = "<TOPIC>";
-    //注意这里path的顺序
-    System.arraycopy(pattPath, 0, matchPath, 0, m);
-    System.arraycopy(thatPath, 0, matchPath, m + 1, n);
-    System.arraycopy(topicPath, 0, matchPath, m + 1 + n + 1, o);
-    return matchPath;
+	if(bSlot) {
+	    String[] pattPath = pattern.getElements();     
+	    return pattPath;
+	}
+	else {
+	    String[] pattPath = pattern.getElements();     
+	    String[] thatPath = that.elements();
+	    String[] topicPath = topic.elements();
+	    int m = pattPath.length;
+	    int n = thatPath.length;
+	    int o = topicPath.length;
+	    String[] matchPath = new String[m + 1 + n + 1 + o];
+	
+	    matchPath[m] = "<THAT>";
+	    matchPath[m + 1 + n] = "<TOPIC>";
+	    //注意这里path的顺序
+	    System.arraycopy(pattPath, 0, matchPath, 0, m);
+	    System.arraycopy(thatPath, 0, matchPath, m + 1, n);
+	    System.arraycopy(topicPath, 0, matchPath, m + 1 + n + 1, o);
+	    return matchPath;
+	}
   }
 
   public Pattern getPattern()
